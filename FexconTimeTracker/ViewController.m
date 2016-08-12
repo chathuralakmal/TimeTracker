@@ -13,7 +13,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:NSApplicationWillBecomeActiveNotification object:nil];
     
 
@@ -47,13 +47,58 @@
         self.appTimer = timer;
         
         [self.stopWatchLabel setStringValue:[self getFormattedString]];
+        
+        [self.startButton setHidden:TRUE];
+        [self.stopButton setHidden:FALSE];
     }else{
-        /* App Starting from ) */
+        /* App Starting from 00 */
         self.timerCount = 0;
         [self.stopWatchLabel setStringValue:[self getFormattedString]];
     }
     
     
+    
+    
+    _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
+    
+    // The text that will be shown in the menu bar
+    _statusItem.title = [self getFormattedString];
+    
+    
+    //    // The image that will be shown in the menu bar, a 16x16 black png works best
+//        _statusItem.image = [NSImage imageNamed:@"task_O_completed"];
+    //
+    //    // The highlighted image, use a white version of the normal image
+    //    _statusItem.alternateImage = [NSImage imageNamed:@"feedbin-logo-alt"];
+    
+    // The image gets a blue background when the item is selected
+    _statusItem.highlightMode = YES;
+
+    
+    NSMenu *menu = [[NSMenu alloc] init];
+    [[menu addItemWithTitle:@"Stop Timer" action:@selector(stopAction:) keyEquivalent:@""] setTarget:self];;
+    
+    [menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
+    [menu addItemWithTitle:@"Quit Time Tracker" action:@selector(terminate:) keyEquivalent:@""];
+    _statusItem.menu = menu;
+    
+    
+    
+    /* populatin data */
+    
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    
+    NSArray *myColors;
+    
+    myColors = [NSArray arrayWithObjects: @"Red", @"Green", @"Blue", @"Yellow", nil];
+    
+    self.dataSource = [[NSMutableArray alloc]init];
+    
+    self.dataSource = [myColors mutableCopy];
+    
+    
+      [self.tableView reloadData];
     
 }
 
@@ -93,6 +138,7 @@
                                                         userInfo:nil repeats:YES];
         
         self.appTimer = timer;
+        _statusItem.title = [self getFormattedString];
 
     }
     
@@ -113,7 +159,7 @@
         int hours = t / 3600;
     
     
-    return [NSString stringWithFormat:@"%02d:%02d:%02d",hours, minutes, seconds];
+    return [NSString stringWithFormat:@" %02d:%02d:%02d ",hours, minutes, seconds];
 
 }
 
@@ -122,11 +168,19 @@
     
     [self.appTimer invalidate];
     
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"startDate"];
+        
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    self.timerCount = 0;
+    [self.stopWatchLabel setStringValue:[self getFormattedString]];
+    [_statusItem setTitle:[self getFormattedString]];
+    
+    [self.startButton setHidden:FALSE];
+    [self.stopButton setHidden:TRUE];
+    
 }
 - (IBAction)startAction:(id)sender {
-    
-  
-    
     
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                       target:self selector:@selector(stopWatch:)
@@ -140,12 +194,29 @@
     [[NSUserDefaults standardUserDefaults] setObject:startDate forKey:@"startDate"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
+    [self.startButton setHidden:TRUE];
+    [self.stopButton setHidden:FALSE];
+    
 }
 
 - (void)stopWatch:(NSTimer*)theTimer {
     self.timerCount = self.timerCount + 1;
     [self.stopWatchLabel setStringValue:[self getFormattedString]];
-    
+    [_statusItem setTitle:[self getFormattedString]];
 }
+
+
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
+    return self.dataSource.count;
+}
+
+- (NSView*)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+    NSTableCellView *cellView = [tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
+    
+    cellView.textField.stringValue = @"Test";
+
+    return cellView;
+}
+
 
 @end

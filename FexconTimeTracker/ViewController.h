@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface ViewController : NSViewController
+@interface ViewController : NSViewController<NSTableViewDelegate, NSTableViewDataSource>
 
 @property (strong) IBOutlet NSTextField *stopWatchLabel;
 
@@ -16,7 +16,17 @@
 @property (nonatomic, assign) int timerCount;
 
 @property (nonatomic, assign) BOOL alreadyRunning;
+@property (strong) IBOutlet NSButton *startButton;
+@property (strong) IBOutlet NSButton *stopButton;
 
+
+
+@property (strong, nonatomic) NSStatusItem *statusItem;
+
+
+@property (nonatomic, strong) IBOutlet NSTableView *tableView;
+
+@property (strong) NSMutableArray *dataSource;
 
 @end
 

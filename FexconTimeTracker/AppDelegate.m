@@ -18,6 +18,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
+
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
@@ -174,8 +175,5 @@
     return NSTerminateNow;
 }
 
-- (void)applicationWillBecomeActive:(NSNotification *)notification {
-    //NSLog(@"Active");
-}
 
 @end
