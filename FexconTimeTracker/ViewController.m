@@ -14,6 +14,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    //NSLog(@"Stored Tasks.... %@",[TTDatabase getAllTasks]);
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:NSApplicationWillBecomeActiveNotification object:nil];
     
 
@@ -168,8 +171,25 @@
     
     [self.appTimer invalidate];
     
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
+    NSString *stopDate = [dateFormatter stringFromDate:[NSDate date]];
+    
+    NSString *savedStartedDate = [[NSUserDefaults standardUserDefaults]
+                                  stringForKey:@"startDate"];
+    
+    
+    //First Taking Already Exsist Data
+    Tasks *tempTasks = [TTDatabase getTaskByName:self.textTaskName.stringValue];
+    NSNumber * tempSeconds = tempTasks.totalSeconds;
+    
+    NSTimeInterval secondsBetween = [[dateFormatter dateFromString:stopDate] timeIntervalSinceDate:[dateFormatter dateFromString:savedStartedDate]];
+    
+    int totalSeconds = [tempSeconds intValue]+secondsBetween;
+    
+    [TTDatabase insertTaskInfo:self.textTaskName.stringValue totalSeconds:[NSNumber numberWithInt:totalSeconds]];
+    
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"startDate"];
-        
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     self.timerCount = 0;
@@ -196,6 +216,8 @@
     
     [self.startButton setHidden:TRUE];
     [self.stopButton setHidden:FALSE];
+    
+    [self.textTaskName setEditable:FALSE];
     
 }
 

@@ -901,6 +901,7 @@
                         <outlet property="stopButton" destination="eYy-3x-YTg" id="Etj-w8-Lbj"/>
                         <outlet property="stopWatchLabel" destination="4kd-P9-0Yo" id="knc-Ab-TA2"/>
                         <outlet property="tableView" destination="Rei-YN-68Q" id="MDO-o7-S1s"/>
+                        <outlet property="textTaskName" destination="yKZ-M1-dLy" id="Bda-or-CDh"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

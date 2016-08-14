@@ -2,7 +2,7 @@
 //  Tasks+CoreDataProperties.h
 //  FexconTimeTracker
 //
-//  Created by Chathura Lakmal on 8/13/16.
+//  Created by Chathura Lakmal on 8/14/16.
 //  Copyright © 2016 Chathura. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -16,16 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Tasks (CoreDataProperties)
 
 @property (nullable, nonatomic, retain) NSString *taskName;
-@property (nullable, nonatomic, retain) NSSet<Time *> *time;
-
-@end
-
-@interface Tasks (CoreDataGeneratedAccessors)
-
-- (void)addTimeObject:(Time *)value;
-- (void)removeTimeObject:(Time *)value;
-- (void)addTime:(NSSet<Time *> *)values;
-- (void)removeTime:(NSSet<Time *> *)values;
+@property (nullable, nonatomic, retain) NSNumber *totalSeconds;
 
 @end
 

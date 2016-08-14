@@ -22,7 +22,9 @@
 
 + (Tasks *)getTaskByName:(NSString *)name;
 
-+ (BOOL)insertTaskInfo:(NSString *)name startTime:(NSString *)startTime endTime:(NSString *)endTime;
++ (NSMutableArray *)getAllTasks;
+
++ (BOOL)insertTaskInfo:(NSString *)name totalSeconds:(NSNumber *)totalSeconds;
 
 
 @end

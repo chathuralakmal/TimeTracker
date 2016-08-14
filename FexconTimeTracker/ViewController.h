@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+#import "TTDatabase.h"
 @interface ViewController : NSViewController<NSTableViewDelegate, NSTableViewDataSource>
 
 @property (strong) IBOutlet NSTextField *stopWatchLabel;
@@ -20,6 +20,7 @@
 @property (strong) IBOutlet NSButton *stopButton;
 
 
+@property (strong) IBOutlet NSTextField *textTaskName;
 
 @property (strong, nonatomic) NSStatusItem *statusItem;
 

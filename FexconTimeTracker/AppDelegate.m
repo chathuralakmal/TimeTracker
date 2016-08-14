@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "TTDatabase.h"
 
 @interface AppDelegate ()
 
@@ -18,6 +19,13 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
+    
+    //database
+    [TTDatabase sharedDatabaseWithManagedObjectContext:self.managedObjectContext];
+    
+    
+    
+    NSLog(@"Stored Tasks.... %@",[TTDatabase getAllTasks]);
 
 }
 

@@ -46,7 +46,7 @@
     return nil;
 }
 
-+(BOOL)insertTaskInfo:(NSString *)name startTime:(NSString *)startTime endTime:(NSString *)endTime{
++(BOOL)insertTaskInfo:(NSString *)name totalSeconds:(NSNumber *)totalSeconds{
     Tasks *tasks  = [self getTaskByName:name];
     
     if(!tasks){
@@ -54,18 +54,22 @@
     }
     
     [tasks setTaskName:name];
-    
-    
-    Time *time = [[Time alloc]init];
-    
-    [time setStartTime:startTime];
-    [time setEndTime:endTime];
-    
-    [tasks addTimeObject:time];
-    
-    
+    [tasks setTotalSeconds:totalSeconds];
+  
     return [self commitUpdates];
 
+}
+
++(NSMutableArray *)getAllTasks{
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Tasks" inManagedObjectContext:[self sharedDatabaseWithManagedObjectContext:nil].managedObjectContext];
+    [request setEntity:entity];
+    [request setReturnsObjectsAsFaults:NO];
+    
+    NSError *error = nil;
+    NSMutableArray *fetchResults = [[[self sharedDatabaseWithManagedObjectContext:nil].managedObjectContext executeFetchRequest:request error:&error] mutableCopy];
+    
+    return fetchResults;
 }
 
 #pragma mark - Common functions

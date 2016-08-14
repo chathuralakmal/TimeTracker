@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		04F591EC1D5F743E00E0408E /* Tasks+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F591E51D5F743E00E0408E /* Tasks+CoreDataProperties.m */; };
 		04F591ED1D5F743E00E0408E /* Tasks.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F591E71D5F743E00E0408E /* Tasks.m */; };
-		04F591EE1D5F743E00E0408E /* Time+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F591E91D5F743E00E0408E /* Time+CoreDataProperties.m */; };
-		04F591EF1D5F743E00E0408E /* Time.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F591EB1D5F743E00E0408E /* Time.m */; };
 		04F591F31D5F746700E0408E /* TTDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F591F21D5F746700E0408E /* TTDatabase.m */; };
 		445635FE1D5D7B9B001908E1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 445635FD1D5D7B9B001908E1 /* AppDelegate.m */; };
 		445636011D5D7B9B001908E1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 445636001D5D7B9B001908E1 /* main.m */; };
@@ -25,10 +23,6 @@
 		04F591E51D5F743E00E0408E /* Tasks+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Tasks+CoreDataProperties.m"; path = "model/Tasks+CoreDataProperties.m"; sourceTree = "<group>"; };
 		04F591E61D5F743E00E0408E /* Tasks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tasks.h; path = model/Tasks.h; sourceTree = "<group>"; };
 		04F591E71D5F743E00E0408E /* Tasks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tasks.m; path = model/Tasks.m; sourceTree = "<group>"; };
-		04F591E81D5F743E00E0408E /* Time+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Time+CoreDataProperties.h"; path = "model/Time+CoreDataProperties.h"; sourceTree = "<group>"; };
-		04F591E91D5F743E00E0408E /* Time+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Time+CoreDataProperties.m"; path = "model/Time+CoreDataProperties.m"; sourceTree = "<group>"; };
-		04F591EA1D5F743E00E0408E /* Time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Time.h; path = model/Time.h; sourceTree = "<group>"; };
-		04F591EB1D5F743E00E0408E /* Time.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Time.m; path = model/Time.m; sourceTree = "<group>"; };
 		04F591F11D5F746700E0408E /* TTDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTDatabase.h; path = util/TTDatabase.h; sourceTree = "<group>"; };
 		04F591F21D5F746700E0408E /* TTDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTDatabase.m; path = util/TTDatabase.m; sourceTree = "<group>"; };
 		445635F91D5D7B9B001908E1 /* FexconTimeTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FexconTimeTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,10 +62,6 @@
 				04F591E51D5F743E00E0408E /* Tasks+CoreDataProperties.m */,
 				04F591E61D5F743E00E0408E /* Tasks.h */,
 				04F591E71D5F743E00E0408E /* Tasks.m */,
-				04F591E81D5F743E00E0408E /* Time+CoreDataProperties.h */,
-				04F591E91D5F743E00E0408E /* Time+CoreDataProperties.m */,
-				04F591EA1D5F743E00E0408E /* Time.h */,
-				04F591EB1D5F743E00E0408E /* Time.m */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -197,11 +187,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04F591EF1D5F743E00E0408E /* Time.m in Sources */,
 				04F591ED1D5F743E00E0408E /* Tasks.m in Sources */,
 				445636071D5D7B9B001908E1 /* FexconTimeTracker.xcdatamodeld in Sources */,
 				04F591F31D5F746700E0408E /* TTDatabase.m in Sources */,
-				04F591EE1D5F743E00E0408E /* Time+CoreDataProperties.m in Sources */,
 				445636041D5D7B9B001908E1 /* ViewController.m in Sources */,
 				445636011D5D7B9B001908E1 /* main.m in Sources */,
 				445635FE1D5D7B9B001908E1 /* AppDelegate.m in Sources */,
