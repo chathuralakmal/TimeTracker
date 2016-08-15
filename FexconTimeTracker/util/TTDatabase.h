@@ -11,20 +11,26 @@
 #import "Tasks.h"
 
 
-@interface TTDatabase : NSObject
+@interface TTDatabase : NSObject{
+    
+    NSManagedObjectContext          *managedObjectContext;
+    NSManagedObjectModel            *managedObjectModel;
+    NSPersistentStoreCoordinator    *persistentStoreCoordinator;
+}
 
-@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+//@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
-- (TTDatabase *)initWithManagedObjectContext:(NSManagedObjectContext*)ctx;
+//- (TTDatabase *)initWithManagedObjectContext:(NSManagedObjectContext*)ctx;
 
-+ (TTDatabase *)sharedDatabaseWithManagedObjectContext:(NSManagedObjectContext*)ctx;
+//+ (TTDatabase *)sharedDatabaseWithManagedObjectContext:(NSManagedObjectContext*)ctx;
 
 
-+ (Tasks *)getTaskByName:(NSString *)name;
+- (Tasks *)getTaskByName:(NSString *)name;
 
-+ (NSMutableArray *)getAllTasks;
+- (NSMutableArray *)getAllTasks;
 
-+ (BOOL)insertTaskInfo:(NSString *)name totalSeconds:(NSNumber *)totalSeconds;
+- (BOOL)insertTaskInfo:(NSString *)name totalSeconds:(NSNumber *)totalSeconds;
 
+-(BOOL)deleteAllTasks;
 
 @end

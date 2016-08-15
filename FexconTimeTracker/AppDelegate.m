@@ -8,10 +8,9 @@
 
 #import "AppDelegate.h"
 #import "TTDatabase.h"
+#import "ViewController.h"
 
 @interface AppDelegate ()
-
-- (IBAction)saveAction:(id)sender;
 
 @end
 
@@ -19,19 +18,18 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
-    
+
     //database
-    [TTDatabase sharedDatabaseWithManagedObjectContext:self.managedObjectContext];
-    
-    
-    
-    NSLog(@"Stored Tasks.... %@",[TTDatabase getAllTasks]);
+  //  [TTDatabase sharedDatabaseWithManagedObjectContext:self.managedObjectContext];
+
+    //NSLog(@"Stored Tasks.... %@",[TTDatabase getAllTasks]);
 
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application
 }
+
 
 #pragma mark - Core Data stack
 

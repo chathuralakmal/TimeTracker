@@ -16,6 +16,8 @@
 		445636071D5D7B9B001908E1 /* FexconTimeTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 445636051D5D7B9B001908E1 /* FexconTimeTracker.xcdatamodeld */; };
 		445636091D5D7B9B001908E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 445636081D5D7B9B001908E1 /* Assets.xcassets */; };
 		4456360C1D5D7B9B001908E1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4456360A1D5D7B9B001908E1 /* Main.storyboard */; };
+		4469D3111D616C0B00910AD8 /* timer-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4469D3101D616C0B00910AD8 /* timer-icon.png */; };
+		4469D3131D616D3E00910AD8 /* clock-icon-8.png in Resources */ = {isa = PBXBuildFile; fileRef = 4469D3121D616D3E00910AD8 /* clock-icon-8.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,8 @@
 		445636081D5D7B9B001908E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4456360B1D5D7B9B001908E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4456360D1D5D7B9B001908E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4469D3101D616C0B00910AD8 /* timer-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timer-icon.png"; sourceTree = "<group>"; };
+		4469D3121D616D3E00910AD8 /* clock-icon-8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clock-icon-8.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +55,8 @@
 		04A9D8451D5E2D5B001D565F /* images */ = {
 			isa = PBXGroup;
 			children = (
+				4469D3101D616C0B00910AD8 /* timer-icon.png */,
+				4469D3121D616D3E00910AD8 /* clock-icon-8.png */,
 			);
 			name = images;
 			sourceTree = "<group>";
@@ -177,6 +183,8 @@
 			files = (
 				445636091D5D7B9B001908E1 /* Assets.xcassets in Resources */,
 				4456360C1D5D7B9B001908E1 /* Main.storyboard in Resources */,
+				4469D3131D616D3E00910AD8 /* clock-icon-8.png in Resources */,
+				4469D3111D616C0B00910AD8 /* timer-icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

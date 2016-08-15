@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "AppDelegate.h"
+#import "TTDatabase.h"
 
 @implementation ViewController
 
@@ -15,7 +16,11 @@
     [super viewDidLoad];
     
     
-    //NSLog(@"Stored Tasks.... %@",[TTDatabase getAllTasks]);
+    //NSLog(@"%@", [[[NSApplication sharedApplication]delegate] description]);
+    if (!dbmanager)dbmanager = [[TTDatabase alloc]init];
+    
+    //NSMutableArray *cartArrayCount = [dbmanager getCartItemsByRestId:self.resturant.resId];
+    NSLog(@"Stored Tasks.... %@",[dbmanager getAllTasks]);
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:NSApplicationWillBecomeActiveNotification object:nil];
     
@@ -68,41 +73,31 @@
     _statusItem.title = [self getFormattedString];
     
     
-    //    // The image that will be shown in the menu bar, a 16x16 black png works best
-//        _statusItem.image = [NSImage imageNamed:@"task_O_completed"];
-    //
-    //    // The highlighted image, use a white version of the normal image
-    //    _statusItem.alternateImage = [NSImage imageNamed:@"feedbin-logo-alt"];
+        // The image that will be shown in the menu bar, a 16x16 black png works best
+    _statusItem.image = [NSImage imageNamed:@"clock-icon-8"];
+
+   // The highlighted image, use a white version of the normal image
+    _statusItem.alternateImage = [NSImage imageNamed:@"clock-icon-8"];
     
     // The image gets a blue background when the item is selected
     _statusItem.highlightMode = YES;
-
-    
+ 
     NSMenu *menu = [[NSMenu alloc] init];
     [[menu addItemWithTitle:@"Stop Timer" action:@selector(stopAction:) keyEquivalent:@""] setTarget:self];;
     
     [menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
     [menu addItemWithTitle:@"Quit Time Tracker" action:@selector(terminate:) keyEquivalent:@""];
     _statusItem.menu = menu;
-    
-    
-    
+
     /* populatin data */
     
     _tableView.delegate = self;
     _tableView.dataSource = self;
     
-    NSArray *myColors;
-    
-    myColors = [NSArray arrayWithObjects: @"Red", @"Green", @"Blue", @"Yellow", nil];
-    
-    self.dataSource = [[NSMutableArray alloc]init];
-    
-    self.dataSource = [myColors mutableCopy];
-    
-    
-      [self.tableView reloadData];
-    
+
+    [_tableView setColumnAutoresizingStyle:NSTableViewUniformColumnAutoresizingStyle];
+    //[NSTableColumn setResizingMask:NSTableColumnAutoresizingMask];
+    [self updateData];
 }
 
 - (void)setRepresentedObject:(id)representedObject {
@@ -124,6 +119,13 @@
     
     
     if(savedStartedDate){
+        
+        self.textTaskName.stringValue = [[NSUserDefaults standardUserDefaults]
+                                         stringForKey:@"taskName"];
+        
+        
+        [self.textTaskName setEditable:FALSE];
+        
         startDateFromString = [dateFormatter dateFromString:savedStartedDate];
         NSString *startDate = [dateFormatter stringFromDate:[NSDate date]];
         
@@ -144,10 +146,22 @@
         _statusItem.title = [self getFormattedString];
 
     }
-    
+
     
 }
 
+-(void)updateData{
+    self.dataSource = [[NSMutableArray alloc]init];
+    self.dataSource = [dbmanager getAllTasks];
+    
+    if(self.dataSource.count >0){
+        [self.clearButton setHidden:FALSE];
+    }else{
+        [self.clearButton setHidden:TRUE];
+    }
+    
+    [self.tableView reloadData];
+}
 
 -(void)viewWillAppear{
     NSLog(@"Testing");
@@ -180,16 +194,17 @@
     
     
     //First Taking Already Exsist Data
-    Tasks *tempTasks = [TTDatabase getTaskByName:self.textTaskName.stringValue];
+    Tasks *tempTasks = [dbmanager getTaskByName:self.textTaskName.stringValue];
     NSNumber * tempSeconds = tempTasks.totalSeconds;
     
     NSTimeInterval secondsBetween = [[dateFormatter dateFromString:stopDate] timeIntervalSinceDate:[dateFormatter dateFromString:savedStartedDate]];
     
     int totalSeconds = [tempSeconds intValue]+secondsBetween;
     
-    [TTDatabase insertTaskInfo:self.textTaskName.stringValue totalSeconds:[NSNumber numberWithInt:totalSeconds]];
+    [dbmanager insertTaskInfo:self.textTaskName.stringValue totalSeconds:[NSNumber numberWithInt:totalSeconds]];
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"startDate"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"taskName"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     self.timerCount = 0;
@@ -198,6 +213,10 @@
     
     [self.startButton setHidden:FALSE];
     [self.stopButton setHidden:TRUE];
+    
+    self.textTaskName.stringValue = @"";
+    
+    [self updateData];
     
 }
 - (IBAction)startAction:(id)sender {
@@ -212,6 +231,7 @@
     NSString *startDate = [dateFormatter stringFromDate:[NSDate date]];
 
     [[NSUserDefaults standardUserDefaults] setObject:startDate forKey:@"startDate"];
+    [[NSUserDefaults standardUserDefaults] setObject:self.textTaskName.stringValue forKey:@"taskName"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [self.startButton setHidden:TRUE];
@@ -229,16 +249,52 @@
 
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
+    
     return self.dataSource.count;
 }
 
 - (NSView*)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
     NSTableCellView *cellView = [tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
     
-    cellView.textField.stringValue = @"Test";
+
+    
+    Tasks *tempTask = [self.dataSource objectAtIndex:row];
+    
+    if ([tableColumn.identifier isEqualToString:@"number"]) {
+        
+        cellView.textField.stringValue = [NSString stringWithFormat:@"%ld",(long)row];
+        
+    } else if([tableColumn.identifier isEqualToString:@"name"]) {
+        
+       cellView.textField.stringValue = tempTask.taskName;
+
+        
+    } else if ([tableColumn.identifier isEqualToString:@"time"]){
+        
+        cellView.textField.stringValue = [self timeFormatted:[tempTask.totalSeconds intValue]];
+    
+    }
+    [tableView setColumnAutoresizingStyle:NSTableViewUniformColumnAutoresizingStyle];
+    [tableColumn setResizingMask:NSTableColumnAutoresizingMask];
 
     return cellView;
 }
 
+
+- (NSString *)timeFormatted:(int)totalSeconds
+{
+    
+    int seconds = totalSeconds % 60;
+    int minutes = (totalSeconds / 60) % 60;
+    int hours = totalSeconds / 3600;
+    
+    return [NSString stringWithFormat:@"%02d:%02d:%02d",hours, minutes, seconds];
+}
+
+- (IBAction)clearAction:(id)sender {
+    
+    [dbmanager deleteAllTasks];
+    [self updateData];
+}
 
 @end

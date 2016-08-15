@@ -8,7 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 #import "TTDatabase.h"
-@interface ViewController : NSViewController<NSTableViewDelegate, NSTableViewDataSource>
+@interface ViewController : NSViewController<NSTableViewDelegate, NSTableViewDataSource>{
+    TTDatabase *dbmanager;
+
+    BOOL loadedAppDelegate;
+}
+
+//@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
 
 @property (strong) IBOutlet NSTextField *stopWatchLabel;
 
@@ -18,6 +25,7 @@
 @property (nonatomic, assign) BOOL alreadyRunning;
 @property (strong) IBOutlet NSButton *startButton;
 @property (strong) IBOutlet NSButton *stopButton;
+@property (strong) IBOutlet NSButton *clearButton;
 
 
 @property (strong) IBOutlet NSTextField *textTaskName;
@@ -29,5 +37,7 @@
 
 @property (strong) NSMutableArray *dataSource;
 
+
+//-(void)loadData;
 @end
 
