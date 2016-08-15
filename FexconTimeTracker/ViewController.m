@@ -216,6 +216,8 @@
     
     self.textTaskName.stringValue = @"";
     
+    [self.textTaskName setEditable:TRUE];
+    
     [self updateData];
     
 }
