@@ -12,6 +12,8 @@
     TTDatabase *dbmanager;
 
     BOOL loadedAppDelegate;
+    
+    NSMenu *menu;
 }
 
 //@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;

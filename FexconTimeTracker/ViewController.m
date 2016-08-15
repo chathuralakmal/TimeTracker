@@ -34,8 +34,30 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
     
+    menu = [[NSMenu alloc] init];
+
+    _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
+    
+    // The text that will be shown in the menu bar
+    _statusItem.title = [self getFormattedString];
+    
+    
+    // The image that will be shown in the menu bar, a 16x16 black png works best
+    _statusItem.image = [NSImage imageNamed:@"clock-icon-8"];
+    
+    // The highlighted image, use a white version of the normal image
+    _statusItem.alternateImage = [NSImage imageNamed:@"clock-icon-8"];
+    
+    // The image gets a blue background when the item is selected
+    _statusItem.highlightMode = YES;
+    
+    
+
     
     if(savedStartedDate){
+        
+        
+        
         startDateFromString = [dateFormatter dateFromString:savedStartedDate];
         NSString *startDate = [dateFormatter stringFromDate:[NSDate date]];
         
@@ -58,36 +80,25 @@
         
         [self.startButton setHidden:TRUE];
         [self.stopButton setHidden:FALSE];
+        
+        [[menu addItemWithTitle:@"Stop Timer" action:@selector(stopAction:) keyEquivalent:@""] setTarget:self];
+        
     }else{
         /* App Starting from 00 */
+
+        [menu addItemWithTitle:@"Stop Timer" action:nil keyEquivalent:@""];
+        
         self.timerCount = 0;
         [self.stopWatchLabel setStringValue:[self getFormattedString]];
     }
     
-    
-    
-    
-    _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
-    
-    // The text that will be shown in the menu bar
-    _statusItem.title = [self getFormattedString];
-    
-    
-        // The image that will be shown in the menu bar, a 16x16 black png works best
-    _statusItem.image = [NSImage imageNamed:@"clock-icon-8"];
-
-   // The highlighted image, use a white version of the normal image
-    _statusItem.alternateImage = [NSImage imageNamed:@"clock-icon-8"];
-    
-    // The image gets a blue background when the item is selected
-    _statusItem.highlightMode = YES;
- 
-    NSMenu *menu = [[NSMenu alloc] init];
-    [[menu addItemWithTitle:@"Stop Timer" action:@selector(stopAction:) keyEquivalent:@""] setTarget:self];;
-    
+   
     [menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
     [menu addItemWithTitle:@"Quit Time Tracker" action:@selector(terminate:) keyEquivalent:@""];
     _statusItem.menu = menu;
+    
+    
+   
 
     /* populatin data */
     
@@ -117,6 +128,8 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
     
+    
+    NSLog(@"Menu Item %@",menu);
     
     if(savedStartedDate){
         
@@ -299,4 +312,15 @@
     [self updateData];
 }
 
+- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row{
+    Tasks *tempTask = [self.dataSource objectAtIndex:row];
+    
+    
+    /** if True. no current task. **/
+    if(self.textTaskName.editable){
+       NSLog(@"Selected Item %@",tempTask.taskName);
+    }
+    
+    return true;
+}
 @end
