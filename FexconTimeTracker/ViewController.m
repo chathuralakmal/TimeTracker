@@ -34,7 +34,7 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
     
-    menu = [[NSMenu alloc] init];
+   
 
     _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     
@@ -50,13 +50,10 @@
     
     // The image gets a blue background when the item is selected
     _statusItem.highlightMode = YES;
-    
-    
 
-    
     if(savedStartedDate){
-        
-        
+
+        isTimerActive = TRUE;
         
         startDateFromString = [dateFormatter dateFromString:savedStartedDate];
         NSString *startDate = [dateFormatter stringFromDate:[NSDate date]];
@@ -81,24 +78,16 @@
         [self.startButton setHidden:TRUE];
         [self.stopButton setHidden:FALSE];
         
-        [[menu addItemWithTitle:@"Stop Timer" action:@selector(stopAction:) keyEquivalent:@""] setTarget:self];
+        
         
     }else{
         /* App Starting from 00 */
 
-        [menu addItemWithTitle:@"Stop Timer" action:nil keyEquivalent:@""];
+        isTimerActive = FALSE;
         
         self.timerCount = 0;
         [self.stopWatchLabel setStringValue:[self getFormattedString]];
     }
-    
-   
-    [menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
-    [menu addItemWithTitle:@"Quit Time Tracker" action:@selector(terminate:) keyEquivalent:@""];
-    _statusItem.menu = menu;
-    
-    
-   
 
     /* populatin data */
     
@@ -107,7 +96,7 @@
     
 
     [_tableView setColumnAutoresizingStyle:NSTableViewUniformColumnAutoresizingStyle];
-    //[NSTableColumn setResizingMask:NSTableColumnAutoresizingMask];
+
     [self updateData];
 }
 
@@ -127,11 +116,11 @@
 
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
-    
-    
-    NSLog(@"Menu Item %@",menu);
+   
     
     if(savedStartedDate){
+        
+        isTimerActive = TRUE;
         
         self.textTaskName.stringValue = [[NSUserDefaults standardUserDefaults]
                                          stringForKey:@"taskName"];
@@ -172,6 +161,19 @@
     }else{
         [self.clearButton setHidden:TRUE];
     }
+    
+    menu = [[NSMenu alloc] init];
+    
+    if(isTimerActive){
+         [[menu addItemWithTitle:@"Stop Timer" action:@selector(stopAction:) keyEquivalent:@""] setTarget:self];
+    }else{
+        [menu addItemWithTitle:@"Stop Timer" action:nil keyEquivalent:@""];
+    }
+    
+    [menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
+    [menu addItemWithTitle:@"Quit Time Tracker" action:@selector(terminate:) keyEquivalent:@""];
+    _statusItem.menu = menu;
+    
     
     [self.tableView reloadData];
 }
@@ -231,6 +233,8 @@
     
     [self.textTaskName setEditable:TRUE];
     
+    isTimerActive = FALSE;
+    
     [self updateData];
     
 }
@@ -253,6 +257,10 @@
     [self.stopButton setHidden:FALSE];
     
     [self.textTaskName setEditable:FALSE];
+    
+    isTimerActive = TRUE;
+    
+    [self updateData];
     
 }
 

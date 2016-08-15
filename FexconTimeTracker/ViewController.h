@@ -13,6 +13,8 @@
 
     BOOL loadedAppDelegate;
     
+    BOOL isTimerActive;
+    
     NSMenu *menu;
 }
 
