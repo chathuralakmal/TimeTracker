@@ -31,12 +31,11 @@
 @property (strong) IBOutlet NSButton *stopButton;
 @property (strong) IBOutlet NSButton *clearButton;
 @property (strong) IBOutlet NSButton *continueButton;
-
+@property (strong) IBOutlet NSButton *buttonNew;
 
 @property (strong) IBOutlet NSTextField *textTaskName;
 
 @property (strong, nonatomic) NSStatusItem *statusItem;
-
 
 @property (nonatomic, strong) IBOutlet NSTableView *tableView;
 

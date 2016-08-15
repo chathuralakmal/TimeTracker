@@ -917,6 +917,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="buttonNew" destination="yQl-Zj-TAe" id="cD6-Ea-87w"/>
                         <outlet property="clearButton" destination="zU6-Sj-lof" id="YoC-ff-L5M"/>
                         <outlet property="continueButton" destination="JUb-SF-Ke9" id="FAR-pT-rGJ"/>
                         <outlet property="startButton" destination="xvU-76-L5G" id="M8L-fo-Q84"/>

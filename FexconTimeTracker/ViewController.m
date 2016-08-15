@@ -333,7 +333,8 @@
         
         [self.startButton setHidden:TRUE];
         [self.stopButton setHidden:TRUE];
-       // [self.newButton setHidden:FALSE];
+        [self.buttonNew setHidden:FALSE];
+        [self.continueButton setHidden:FALSE];
     
     }
     
