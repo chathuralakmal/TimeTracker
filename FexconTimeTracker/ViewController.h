@@ -30,6 +30,7 @@
 @property (strong) IBOutlet NSButton *startButton;
 @property (strong) IBOutlet NSButton *stopButton;
 @property (strong) IBOutlet NSButton *clearButton;
+@property (strong) IBOutlet NSButton *continueButton;
 
 
 @property (strong) IBOutlet NSTextField *textTaskName;

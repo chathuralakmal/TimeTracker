@@ -832,16 +832,6 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
-                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eYy-3x-YTg">
-                                <rect key="frame" x="188" y="391" width="104" height="32"/>
-                                <buttonCell key="cell" type="push" title="STOP" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xHr-sf-ieK">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" size="16" name="Avenir-Medium"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="stopAction:" target="XfG-lQ-9wD" id="9ae-aG-pKb"/>
-                                </connections>
-                            </button>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yKZ-M1-dLy">
                                 <rect key="frame" x="20" y="427" width="440" height="27"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" alignment="center" placeholderString="Project Name" drawsBackground="YES" id="kej-cf-bEZ">
@@ -856,6 +846,9 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" size="16" name="Avenir-Medium"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="newAction:" target="XfG-lQ-9wD" id="N4f-2n-zMD"/>
+                                </connections>
                             </button>
                             <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zU6-Sj-lof">
                                 <rect key="frame" x="362" y="391" width="104" height="32"/>
@@ -867,16 +860,38 @@
                                     <action selector="clearAction:" target="XfG-lQ-9wD" id="ru0-hj-LJC"/>
                                 </connections>
                             </button>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eYy-3x-YTg">
+                                <rect key="frame" x="188" y="391" width="104" height="32"/>
+                                <buttonCell key="cell" type="push" title="STOP" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xHr-sf-ieK">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" size="16" name="Avenir-Medium"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="stopAction:" target="XfG-lQ-9wD" id="9ae-aG-pKb"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JUb-SF-Ke9">
+                                <rect key="frame" x="178" y="391" width="125" height="32"/>
+                                <buttonCell key="cell" type="push" title="CONTINUE" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ihy-tx-9yU">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" size="16" name="Avenir-Medium"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="continueAction:" target="XfG-lQ-9wD" id="fKW-CG-W66"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="zU6-Sj-lof" firstAttribute="top" secondItem="yKZ-M1-dLy" secondAttribute="bottom" constant="8" id="3Lp-N0-uTw"/>
                             <constraint firstItem="4kd-P9-0Yo" firstAttribute="top" secondItem="xvU-76-L5G" secondAttribute="bottom" constant="26" id="6bO-cC-biz"/>
+                            <constraint firstItem="4kd-P9-0Yo" firstAttribute="top" secondItem="JUb-SF-Ke9" secondAttribute="bottom" constant="26" id="7hp-Kv-lGI"/>
                             <constraint firstItem="eYy-3x-YTg" firstAttribute="leading" secondItem="yQl-Zj-TAe" secondAttribute="trailing" constant="82" id="CS7-eY-rvG"/>
                             <constraint firstItem="dHi-kd-hTf" firstAttribute="top" secondItem="4kd-P9-0Yo" secondAttribute="bottom" constant="56" id="D0U-0U-uWw"/>
                             <constraint firstAttribute="trailing" secondItem="4kd-P9-0Yo" secondAttribute="trailing" constant="20" id="FkS-2P-wNY"/>
                             <constraint firstAttribute="trailing" secondItem="J2J-9m-ywu" secondAttribute="trailing" constant="20" id="Hl9-hT-FA7"/>
                             <constraint firstItem="4kd-P9-0Yo" firstAttribute="top" secondItem="zU6-Sj-lof" secondAttribute="bottom" constant="26" id="ISb-Tk-4hc"/>
                             <constraint firstItem="xvU-76-L5G" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="194" id="KNL-El-oC6"/>
+                            <constraint firstItem="JUb-SF-Ke9" firstAttribute="top" secondItem="yKZ-M1-dLy" secondAttribute="bottom" constant="8" id="MlK-Eg-TRZ"/>
                             <constraint firstItem="J2J-9m-ywu" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" id="OCZ-oM-EO2"/>
                             <constraint firstItem="4kd-P9-0Yo" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="Ojr-wW-cCh"/>
                             <constraint firstAttribute="trailing" secondItem="dHi-kd-hTf" secondAttribute="trailing" constant="20" id="PQU-tT-ZJt"/>
@@ -887,6 +902,7 @@
                             <constraint firstItem="J2J-9m-ywu" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="adt-rg-JEZ"/>
                             <constraint firstAttribute="trailing" secondItem="zU6-Sj-lof" secondAttribute="trailing" constant="20" id="bcW-tu-HEq"/>
                             <constraint firstItem="yQl-Zj-TAe" firstAttribute="top" secondItem="yKZ-M1-dLy" secondAttribute="bottom" constant="8" id="btg-gy-OMX"/>
+                            <constraint firstItem="JUb-SF-Ke9" firstAttribute="leading" secondItem="yQl-Zj-TAe" secondAttribute="trailing" constant="72" id="dCo-Jg-Isx"/>
                             <constraint firstItem="4kd-P9-0Yo" firstAttribute="top" secondItem="eYy-3x-YTg" secondAttribute="bottom" constant="26" id="def-sK-GKn"/>
                             <constraint firstItem="yKZ-M1-dLy" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="iJ5-9L-sEI"/>
                             <constraint firstAttribute="trailing" secondItem="yKZ-M1-dLy" secondAttribute="trailing" constant="20" id="jUC-qJ-Zum"/>
@@ -894,6 +910,7 @@
                             <constraint firstItem="yKZ-M1-dLy" firstAttribute="top" secondItem="J2J-9m-ywu" secondAttribute="bottom" constant="29" id="kj8-VU-OgE"/>
                             <constraint firstItem="dHi-kd-hTf" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="l0F-DR-NE1"/>
                             <constraint firstAttribute="trailing" secondItem="xvU-76-L5G" secondAttribute="trailing" constant="194" id="nKh-zG-d8D"/>
+                            <constraint firstItem="zU6-Sj-lof" firstAttribute="leading" secondItem="JUb-SF-Ke9" secondAttribute="trailing" constant="71" id="rUD-Iv-ysI"/>
                             <constraint firstItem="xvU-76-L5G" firstAttribute="top" secondItem="yKZ-M1-dLy" secondAttribute="bottom" constant="8" id="uES-SA-084"/>
                             <constraint firstItem="4kd-P9-0Yo" firstAttribute="top" secondItem="yQl-Zj-TAe" secondAttribute="bottom" constant="26" id="wJS-0d-n7Z"/>
                             <constraint firstAttribute="trailing" secondItem="eYy-3x-YTg" secondAttribute="trailing" constant="194" id="yHM-ln-ERU"/>
@@ -901,6 +918,7 @@
                     </view>
                     <connections>
                         <outlet property="clearButton" destination="zU6-Sj-lof" id="YoC-ff-L5M"/>
+                        <outlet property="continueButton" destination="JUb-SF-Ke9" id="FAR-pT-rGJ"/>
                         <outlet property="startButton" destination="xvU-76-L5G" id="M8L-fo-Q84"/>
                         <outlet property="stopButton" destination="eYy-3x-YTg" id="Etj-w8-Lbj"/>
                         <outlet property="stopWatchLabel" destination="4kd-P9-0Yo" id="knc-Ab-TA2"/>

@@ -327,8 +327,24 @@
     /** if True. no current task. **/
     if(self.textTaskName.editable){
        NSLog(@"Selected Item %@",tempTask.taskName);
+        self.textTaskName.stringValue = tempTask.taskName;
+        [self.textTaskName setEditable:FALSE];
+        
+        
+        [self.startButton setHidden:TRUE];
+        [self.stopButton setHidden:TRUE];
+       // [self.newButton setHidden:FALSE];
+    
     }
     
     return true;
+}
+- (IBAction)continueAction:(id)sender {
+    
+    
+}
+- (IBAction)newAction:(id)sender {
+    
+    
 }
 @end
