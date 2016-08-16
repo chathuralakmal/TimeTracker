@@ -14,12 +14,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-    //NSLog(@"%@", [[[NSApplication sharedApplication]delegate] description]);
+
     if (!dbmanager)dbmanager = [[TTDatabase alloc]init];
-    
-    //NSMutableArray *cartArrayCount = [dbmanager getCartItemsByRestId:self.resturant.resId];
+
     NSLog(@"Stored Tasks.... %@",[dbmanager getAllTasks]);
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:NSApplicationWillBecomeActiveNotification object:nil];
@@ -27,6 +24,9 @@
 
     NSString *savedStartedDate = [[NSUserDefaults standardUserDefaults]
                                   stringForKey:@"startDate"];
+    
+    NSString *savedCompletedSeconds = [[NSUserDefaults standardUserDefaults]
+                                  stringForKey:@"timerCount"];
     
     NSDate *startDateFromString = [[NSDate alloc] init];
     NSDate *currentDate = [[NSDate alloc] init];
@@ -65,7 +65,7 @@
         
         [self.appTimer invalidate];
         
-        self.timerCount = secondsBetween;
+        self.timerCount = secondsBetween+[savedCompletedSeconds intValue];
         
         NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                           target:self selector:@selector(stopWatch:)
@@ -111,6 +111,9 @@
     NSString *savedStartedDate = [[NSUserDefaults standardUserDefaults]
                                   stringForKey:@"startDate"];
     
+    NSString *savedCompletedSeconds = [[NSUserDefaults standardUserDefaults]
+                                       stringForKey:@"timerCount"];
+    
     NSDate *startDateFromString = [[NSDate alloc] init];
     NSDate *currentDate = [[NSDate alloc] init];
 
@@ -138,7 +141,7 @@
         
         [self.appTimer invalidate];
         
-        self.timerCount = secondsBetween;
+        self.timerCount = secondsBetween+[savedCompletedSeconds intValue];
         
         NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                           target:self selector:@selector(stopWatch:)
@@ -220,6 +223,7 @@
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"startDate"];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"taskName"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"timerCount"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     self.timerCount = 0;
@@ -239,6 +243,16 @@
     
 }
 - (IBAction)startAction:(id)sender {
+    
+    
+    if (!([self.textTaskName.stringValue length] > 0)) {
+        
+        NSAlert *alert = [NSAlert alertWithMessageText:@"Alert!" defaultButton:@"Ok" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Please Enter Task Name First."];
+        [alert runModal];
+        
+        return;
+    }
+
     
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                       target:self selector:@selector(stopWatch:)
@@ -278,9 +292,7 @@
 
 - (NSView*)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
     NSTableCellView *cellView = [tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
-    
 
-    
     Tasks *tempTask = [self.dataSource objectAtIndex:row];
     
     if ([tableColumn.identifier isEqualToString:@"number"]) {
@@ -325,27 +337,64 @@
     
     
     /** if True. no current task. **/
-    if(self.textTaskName.editable){
+   // if(self.textTaskName.editable){
+    if(!isTimerActive){
        NSLog(@"Selected Item %@",tempTask.taskName);
         self.textTaskName.stringValue = tempTask.taskName;
+        alreadyCompletedSeconds = [tempTask.totalSeconds stringValue];
+        self.timerCount = [tempTask.totalSeconds intValue];
+        [self.stopWatchLabel setStringValue:[self getFormattedString]];
         [self.textTaskName setEditable:FALSE];
-        
+      
         
         [self.startButton setHidden:TRUE];
         [self.stopButton setHidden:TRUE];
         [self.buttonNew setHidden:FALSE];
         [self.continueButton setHidden:FALSE];
-    
     }
+    
+   // }
     
     return true;
 }
 - (IBAction)continueAction:(id)sender {
     
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                      target:self selector:@selector(stopWatch:)
+                                                    userInfo:nil repeats:YES];
+    self.appTimer = timer;
+    
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
+    NSString *startDate = [dateFormatter stringFromDate:[NSDate date]];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:startDate forKey:@"startDate"];
+    [[NSUserDefaults standardUserDefaults] setObject:alreadyCompletedSeconds forKey:@"timerCount"];
+    [[NSUserDefaults standardUserDefaults] setObject:self.textTaskName.stringValue forKey:@"taskName"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [self.startButton setHidden:TRUE];
+    [self.stopButton setHidden:FALSE];
+    [self.continueButton setHidden:TRUE];
+    [self.buttonNew setHidden:TRUE];
+    
+    [self.textTaskName setEditable:FALSE];
+    
+    isTimerActive = TRUE;
+    
+    [self updateData];
+    
+    
     
 }
 - (IBAction)newAction:(id)sender {
-    
+    self.textTaskName.stringValue = @"";
+    [self.textTaskName setEditable:TRUE];
+    [self.startButton setHidden:FALSE];
+    [self.stopButton setHidden:TRUE];
+    [self.buttonNew setHidden:TRUE];
+    [self.continueButton setHidden:TRUE];
     
 }
 @end

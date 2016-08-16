@@ -16,6 +16,8 @@
     BOOL isTimerActive;
     
     NSMenu *menu;
+    
+    NSString *alreadyCompletedSeconds;
 }
 
 //@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
