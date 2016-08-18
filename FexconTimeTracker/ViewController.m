@@ -51,6 +51,8 @@
     // The image gets a blue background when the item is selected
     _statusItem.highlightMode = YES;
 
+
+    
     if(savedStartedDate){
 
         isTimerActive = TRUE;
@@ -176,6 +178,7 @@
     [menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
     [menu addItemWithTitle:@"Quit Time Tracker" action:@selector(terminate:) keyEquivalent:@""];
     _statusItem.menu = menu;
+    [menu setDelegate:self];
     
     
     [self.tableView reloadData];
@@ -397,4 +400,16 @@
     [self.continueButton setHidden:TRUE];
     
 }
+
+// This method is called when the status item is clicked
+- (void)menuDidClose:(NSMenu *)menu
+{
+    NSLog(@"%lu",(unsigned long)[NSEvent pressedMouseButtons]);
+    [self appWillEnterForeground:nil];
+    
+    
+}
+
+
+
 @end
