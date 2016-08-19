@@ -8,7 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import "TTDatabase.h"
-@interface ViewController : NSViewController<NSTableViewDelegate, NSTableViewDataSource>{
+#import "ReminderPopOver.h"
+
+@interface ViewController : NSViewController<NSTableViewDelegate, NSTableViewDataSource,NSUserNotificationCenterDelegate,NSMenuDelegate,NSPopoverDelegate>{
     TTDatabase *dbmanager;
 
     BOOL loadedAppDelegate;
@@ -42,6 +44,14 @@
 @property (nonatomic, strong) IBOutlet NSTableView *tableView;
 
 @property (strong) NSMutableArray *dataSource;
+
+
+
+@property (strong) NSPopover *myPopover;
+@property (strong) ReminderPopOver *popoverViewController;
+
+@property (strong) NSWindow *detachedWindow;
+@property (strong) NSPanel *detachedHUDWindow;
 
 
 

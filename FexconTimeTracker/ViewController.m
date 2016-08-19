@@ -10,10 +10,26 @@
 #import "AppDelegate.h"
 #import "TTDatabase.h"
 
-@implementation ViewController
+@implementation ViewController 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    _popoverViewController = [self.storyboard instantiateControllerWithIdentifier:@"PopoverViewController"];
+    /** Popover **/
+    NSRect frame = self.popoverViewController.view.bounds;
+    NSUInteger styleMask = NSTitledWindowMask + NSClosableWindowMask;
+    NSRect rect = [NSWindow contentRectForFrameRect:frame styleMask:styleMask];
+    _detachedWindow = [[NSWindow alloc] initWithContentRect:rect styleMask:styleMask backing:NSBackingStoreBuffered defer:YES];
+    self.detachedWindow.contentViewController = self.popoverViewController;
+    self.detachedWindow.releasedWhenClosed = NO;
+    
+    styleMask = NSTitledWindowMask + NSClosableWindowMask + NSHUDWindowMask + NSUtilityWindowMask;
+    _detachedHUDWindow = [[NSPanel alloc] initWithContentRect:rect styleMask:styleMask backing:NSBackingStoreBuffered defer:YES];
+    self.detachedHUDWindow.contentViewController = self.popoverViewController;
+    self.detachedHUDWindow.releasedWhenClosed = NO;
+    
+    /** Popover **/
 
     if (!dbmanager)dbmanager = [[TTDatabase alloc]init];
 
@@ -102,6 +118,8 @@
     [self updateData];
 }
 
+
+
 - (void)setRepresentedObject:(id)representedObject {
     [super setRepresentedObject:representedObject];
 
@@ -180,7 +198,6 @@
     _statusItem.menu = menu;
     [menu setDelegate:self];
     
-    
     [self.tableView reloadData];
 }
 
@@ -202,84 +219,8 @@
 }
 
 
-- (IBAction)stopAction:(id)sender {
-    
-    [self.appTimer invalidate];
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
-    NSString *stopDate = [dateFormatter stringFromDate:[NSDate date]];
-    
-    NSString *savedStartedDate = [[NSUserDefaults standardUserDefaults]
-                                  stringForKey:@"startDate"];
-    
-    
-    //First Taking Already Exsist Data
-    Tasks *tempTasks = [dbmanager getTaskByName:self.textTaskName.stringValue];
-    NSNumber * tempSeconds = tempTasks.totalSeconds;
-    
-    NSTimeInterval secondsBetween = [[dateFormatter dateFromString:stopDate] timeIntervalSinceDate:[dateFormatter dateFromString:savedStartedDate]];
-    
-    int totalSeconds = [tempSeconds intValue]+secondsBetween;
-    
-    [dbmanager insertTaskInfo:self.textTaskName.stringValue totalSeconds:[NSNumber numberWithInt:totalSeconds]];
-    
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"startDate"];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"taskName"];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"timerCount"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    self.timerCount = 0;
-    [self.stopWatchLabel setStringValue:[self getFormattedString]];
-    [_statusItem setTitle:[self getFormattedString]];
-    
-    [self.startButton setHidden:FALSE];
-    [self.stopButton setHidden:TRUE];
-    
-    self.textTaskName.stringValue = @"";
-    
-    [self.textTaskName setEditable:TRUE];
-    
-    isTimerActive = FALSE;
-    
-    [self updateData];
-    
-}
-- (IBAction)startAction:(id)sender {
-    
-    
-    if (!([self.textTaskName.stringValue length] > 0)) {
-        
-        NSAlert *alert = [NSAlert alertWithMessageText:@"Alert!" defaultButton:@"Ok" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Please Enter Task Name First."];
-        [alert runModal];
-        
-        return;
-    }
 
-    
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0
-                                                      target:self selector:@selector(stopWatch:)
-                                                    userInfo:nil repeats:YES];
-    self.appTimer = timer;
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
-    NSString *startDate = [dateFormatter stringFromDate:[NSDate date]];
 
-    [[NSUserDefaults standardUserDefaults] setObject:startDate forKey:@"startDate"];
-    [[NSUserDefaults standardUserDefaults] setObject:self.textTaskName.stringValue forKey:@"taskName"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    [self.startButton setHidden:TRUE];
-    [self.stopButton setHidden:FALSE];
-    
-    [self.textTaskName setEditable:FALSE];
-    
-    isTimerActive = TRUE;
-    
-    [self updateData];
-    
-}
 
 - (void)stopWatch:(NSTimer*)theTimer {
     self.timerCount = self.timerCount + 1;
@@ -329,18 +270,13 @@
     return [NSString stringWithFormat:@"%02d:%02d:%02d",hours, minutes, seconds];
 }
 
-- (IBAction)clearAction:(id)sender {
-    
-    [dbmanager deleteAllTasks];
-    [self updateData];
-}
+
 
 - (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row{
     Tasks *tempTask = [self.dataSource objectAtIndex:row];
     
     
     /** if True. no current task. **/
-   // if(self.textTaskName.editable){
     if(!isTimerActive){
        NSLog(@"Selected Item %@",tempTask.taskName);
         self.textTaskName.stringValue = tempTask.taskName;
@@ -356,10 +292,175 @@
         [self.continueButton setHidden:FALSE];
     }
     
-   // }
-    
     return true;
 }
+
+
+
+// This method is called when the status item is clicked and released
+- (void)menuDidClose:(NSMenu *)menu
+{
+    NSLog(@"%lu",(unsigned long)[NSEvent pressedMouseButtons]);
+    [self appWillEnterForeground:nil];
+
+}
+
+
+- (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center
+     shouldPresentNotification:(NSUserNotification *)notification
+{
+    return YES;
+}
+
+
+// -------------------------------------------------------------------------------
+//  createPopover
+// -------------------------------------------------------------------------------
+- (void)createPopover
+{
+    if (self.myPopover == nil)
+    {
+        // create and setup our popover
+        _myPopover = [[NSPopover alloc] init];
+        
+        // the popover retains us and we retain the popover,
+        // we drop the popover whenever it is closed to avoid a cycle
+ 
+        self.myPopover.contentViewController = self.popoverViewController;
+       // self.myPopover.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantLight];
+        
+        // AppKit will close the popover when the user interacts with a user interface element outside the popover.
+        // note that interacting with menus or panels that become key only when needed will not cause a transient popover to close.
+        self.myPopover.behavior = NSPopoverBehaviorTransient;
+        
+        // so we can be notified when the popover appears or closes
+        self.myPopover.delegate = self;
+    }
+}
+
+
+#pragma mark - Actions
+#pragma mark -
+
+- (IBAction)stopAction:(id)sender {
+    
+    [self.appTimer invalidate];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
+    NSString *stopDate = [dateFormatter stringFromDate:[NSDate date]];
+    
+    NSString *savedStartedDate = [[NSUserDefaults standardUserDefaults]
+                                  stringForKey:@"startDate"];
+    
+    
+    //First Taking Already Exsist Data
+    Tasks *tempTasks = [dbmanager getTaskByName:self.textTaskName.stringValue];
+    NSNumber * tempSeconds = tempTasks.totalSeconds;
+    
+    
+    /** NSNOTIFICATION **/
+    
+    NSUserNotification *notification = [[NSUserNotification alloc] init];
+    notification.title = @"Time Tracker!";
+    notification.informativeText = [NSString stringWithFormat:@"Stopped time tracking on %@",self.textTaskName.stringValue];
+    notification.soundName = NSUserNotificationDefaultSoundName;
+    
+    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+    
+    /** NSNOTIFICATION **/
+    
+    
+    NSTimeInterval secondsBetween = [[dateFormatter dateFromString:stopDate] timeIntervalSinceDate:[dateFormatter dateFromString:savedStartedDate]];
+    
+    int totalSeconds = [tempSeconds intValue]+secondsBetween;
+    
+    [dbmanager insertTaskInfo:self.textTaskName.stringValue totalSeconds:[NSNumber numberWithInt:totalSeconds]];
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"startDate"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"taskName"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"timerCount"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    self.timerCount = 0;
+    [self.stopWatchLabel setStringValue:[self getFormattedString]];
+    [_statusItem setTitle:[self getFormattedString]];
+    
+    [self.startButton setHidden:FALSE];
+    [self.stopButton setHidden:TRUE];
+    
+    self.textTaskName.stringValue = @"";
+    
+    [self.textTaskName setEditable:TRUE];
+    
+    isTimerActive = FALSE;
+    
+    [self updateData];
+    
+    
+    
+}
+
+- (IBAction)startAction:(id)sender {
+    
+    
+    if (!([self.textTaskName.stringValue length] > 0)) {
+        
+        NSAlert *alert = [NSAlert alertWithMessageText:@"Alert!" defaultButton:@"Ok" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Please Enter Task Name First."];
+        [alert runModal];
+        
+        return;
+    }
+    
+    
+    
+    
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                      target:self selector:@selector(stopWatch:)
+                                                    userInfo:nil repeats:YES];
+    self.appTimer = timer;
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
+    NSString *startDate = [dateFormatter stringFromDate:[NSDate date]];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:startDate forKey:@"startDate"];
+    [[NSUserDefaults standardUserDefaults] setObject:self.textTaskName.stringValue forKey:@"taskName"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [self.startButton setHidden:TRUE];
+    [self.stopButton setHidden:FALSE];
+    
+    [self.textTaskName setEditable:FALSE];
+    
+    isTimerActive = TRUE;
+    
+    [self updateData];
+    
+    /** NSNOTIFICATION **/
+    
+    NSUserNotification *notification = [[NSUserNotification alloc] init];
+    notification.title = @"Time Tracker!";
+    notification.informativeText = [NSString stringWithFormat:@"Started time tracking on %@",self.textTaskName.stringValue];
+    notification.soundName = NSUserNotificationDefaultSoundName;
+    
+    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+    
+    /** NSNOTIFICATION **/
+}
+
+
+
+- (IBAction)newAction:(id)sender {
+    self.textTaskName.stringValue = @"";
+    [self.textTaskName setEditable:TRUE];
+    [self.startButton setHidden:FALSE];
+    [self.stopButton setHidden:TRUE];
+    [self.buttonNew setHidden:TRUE];
+    [self.continueButton setHidden:TRUE];
+    
+}
+
 - (IBAction)continueAction:(id)sender {
     
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0
@@ -387,29 +488,129 @@
     isTimerActive = TRUE;
     
     [self updateData];
-    
-    
-    
-}
-- (IBAction)newAction:(id)sender {
-    self.textTaskName.stringValue = @"";
-    [self.textTaskName setEditable:TRUE];
-    [self.startButton setHidden:FALSE];
-    [self.stopButton setHidden:TRUE];
-    [self.buttonNew setHidden:TRUE];
-    [self.continueButton setHidden:TRUE];
-    
+
 }
 
-// This method is called when the status item is clicked
-- (void)menuDidClose:(NSMenu *)menu
+- (IBAction)clearAction:(id)sender {
+
+        [dbmanager deleteAllTasks];
+        [self updateData];
+
+}
+
+
+- (IBAction)showPopoverAction:(id)sender
 {
-    NSLog(@"%lu",(unsigned long)[NSEvent pressedMouseButtons]);
-    [self appWillEnterForeground:nil];
     
     
+    if (self.detachedWindow.visible)
+    {
+        // popover is already detached to a separate window, so select its window instead
+        [self.detachedWindow makeKeyAndOrderFront:self];
+        return;
+    }
+
+    [self createPopover];
+    
+    NSButton *targetButton = (NSButton *)sender;
+    
+    // configure the preferred position of the popover
+    [self.myPopover showRelativeToRect:targetButton.bounds ofView:sender preferredEdge:NSMaxYEdge];
 }
 
+#pragma mark - NSApplicationDelegate
+
+// -------------------------------------------------------------------------------
+//  applicationShouldTerminateAfterLastWindowClosed:sender
+//
+//  NSApplication delegate method placed here so the sample conveniently quits
+//  after we close the window.
+// -------------------------------------------------------------------------------
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
+{
+    return YES;
+}
+
+
+#pragma mark - NSPopoverDelegate
+
+// -------------------------------------------------------------------------------
+// Invoked on the delegate when the NSPopoverWillShowNotification notification is sent.
+// This method will also be invoked on the popover.
+// -------------------------------------------------------------------------------
+- (void)popoverWillShow:(NSNotification *)notification
+{
+    NSPopover *popover = notification.object;
+    if (popover != nil)
+    {
+        //... operate on that popover
+    }
+}
+
+// -------------------------------------------------------------------------------
+// Invoked on the delegate when the NSPopoverDidShowNotification notification is sent.
+// This method will also be invoked on the popover.
+// -------------------------------------------------------------------------------
+- (void)popoverDidShow:(NSNotification *)notification
+{
+    // add new code here after the popover has been shown
+}
+
+// -------------------------------------------------------------------------------
+// Invoked on the delegate when the NSPopoverWillCloseNotification notification is sent.
+// This method will also be invoked on the popover.
+// -------------------------------------------------------------------------------
+- (void)popoverWillClose:(NSNotification *)notification
+{
+    NSString *closeReason = [notification.userInfo valueForKey:NSPopoverCloseReasonKey];
+    if (closeReason)
+    {
+        // closeReason can be:
+        //      NSPopoverCloseReasonStandard
+        //      NSPopoverCloseReasonDetachToWindow
+        //
+        // add new code here if you want to respond "before" the popover closes
+        //
+    }
+}
+
+// -------------------------------------------------------------------------------
+// Invoked on the delegate when the NSPopoverDidCloseNotification notification is sent.
+// This method will also be invoked on the popover.
+// -------------------------------------------------------------------------------
+- (void)popoverDidClose:(NSNotification *)notification
+{
+    NSString *closeReason = [notification.userInfo valueForKey:NSPopoverCloseReasonKey];
+    if (closeReason)
+    {
+        // closeReason can be:
+        //      NSPopoverCloseReasonStandard
+        //      NSPopoverCloseReasonDetachToWindow
+        //
+        // add new code here if you want to respond "after" the popover closes
+        //
+    }
+    
+    // release our popover since it closed
+    _myPopover = nil;
+}
+
+// -------------------------------------------------------------------------------
+// Invoked on the delegate to give permission to detach popover as a separate window.
+// -------------------------------------------------------------------------------
+- (BOOL)popoverShouldDetach:(NSPopover *)popover
+{
+    return YES;
+}
+
+// -------------------------------------------------------------------------------
+// Invoked on the delegate to when the popover was detached.
+// Note: Invoked only if AppKit provides the window for this popover.
+// -------------------------------------------------------------------------------
+- (void)popoverDidDetach:(NSPopover *)popover
+{
+    NSLog(@"popoverDidDetach");
+}
 
 
 @end

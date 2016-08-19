@@ -18,6 +18,7 @@
 		4456360C1D5D7B9B001908E1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4456360A1D5D7B9B001908E1 /* Main.storyboard */; };
 		4469D3111D616C0B00910AD8 /* timer-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4469D3101D616C0B00910AD8 /* timer-icon.png */; };
 		4469D3131D616D3E00910AD8 /* clock-icon-8.png in Resources */ = {isa = PBXBuildFile; fileRef = 4469D3121D616D3E00910AD8 /* clock-icon-8.png */; };
+		448EBEC41D66D81A007E9984 /* ReminderPopOver.m in Sources */ = {isa = PBXBuildFile; fileRef = 448EBEC31D66D81A007E9984 /* ReminderPopOver.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,8 @@
 		4456360D1D5D7B9B001908E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4469D3101D616C0B00910AD8 /* timer-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timer-icon.png"; sourceTree = "<group>"; };
 		4469D3121D616D3E00910AD8 /* clock-icon-8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clock-icon-8.png"; sourceTree = "<group>"; };
+		448EBEC21D66D81A007E9984 /* ReminderPopOver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReminderPopOver.h; sourceTree = "<group>"; };
+		448EBEC31D66D81A007E9984 /* ReminderPopOver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReminderPopOver.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +110,8 @@
 				445635FD1D5D7B9B001908E1 /* AppDelegate.m */,
 				445636021D5D7B9B001908E1 /* ViewController.h */,
 				445636031D5D7B9B001908E1 /* ViewController.m */,
+				448EBEC21D66D81A007E9984 /* ReminderPopOver.h */,
+				448EBEC31D66D81A007E9984 /* ReminderPopOver.m */,
 				445636081D5D7B9B001908E1 /* Assets.xcassets */,
 				4456360A1D5D7B9B001908E1 /* Main.storyboard */,
 				4456360D1D5D7B9B001908E1 /* Info.plist */,
@@ -201,6 +206,7 @@
 				04F591F31D5F746700E0408E /* TTDatabase.m in Sources */,
 				445636041D5D7B9B001908E1 /* ViewController.m in Sources */,
 				445636011D5D7B9B001908E1 /* main.m in Sources */,
+				448EBEC41D66D81A007E9984 /* ReminderPopOver.m in Sources */,
 				445635FE1D5D7B9B001908E1 /* AppDelegate.m in Sources */,
 				04F591EC1D5F743E00E0408E /* Tasks+CoreDataProperties.m in Sources */,
 			);
