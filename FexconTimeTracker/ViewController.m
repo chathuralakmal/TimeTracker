@@ -502,6 +502,7 @@
 - (IBAction)showPopoverAction:(id)sender
 {
     
+    NSLog(@"Clicked PopOver");
     
     if (self.detachedWindow.visible)
     {

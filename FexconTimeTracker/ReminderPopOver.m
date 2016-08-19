@@ -44,9 +44,7 @@
     
     /** Set Notification **/
  
-    
-    [[[self view] window] close];
-    
+    [[[self view]window]performClose:nil];
 }
 
 @end

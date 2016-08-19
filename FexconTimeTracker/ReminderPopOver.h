@@ -12,4 +12,5 @@
 
 @property (strong) IBOutlet NSDatePicker *dateTime;
 @property (strong) IBOutlet NSTextField *reminderText;
+
 @end
