@@ -3,7 +3,7 @@ Time Tracker for macOS
 
 Simple macOS Application to track your day to day tasks time.
 
-![Time Tracker for macOS](/relative/path/to/img.jpg?raw=true "Time Tracker for macOS")
+![Alt text](timetracker.png?raw=true "Time Tracker")
 
 # License
 TimeTracker is available under the MIT license.
